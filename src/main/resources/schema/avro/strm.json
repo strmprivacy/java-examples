@@ -1,0 +1,23 @@
+{
+  "schema": {
+    "schema_type": "avro",
+    "schema_registry_ref": "public-clickstream/latest"
+  },
+  "key_field": "producerSessionId",
+  "pii_fields": {
+    "customer/id": 0,
+    "producerSessionId": 1
+  },
+  "validations": [
+    {
+      "field": "customer/id",
+      "type": "regex",
+      "value": "^.+$"
+    },
+    {
+      "field": "url",
+      "type": "regex",
+      "value": "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"
+    }
+  ]
+}
