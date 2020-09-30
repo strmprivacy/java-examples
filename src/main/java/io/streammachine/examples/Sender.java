@@ -76,7 +76,7 @@ public class Sender {
                 .setConversion(1)
                 .setStrmMeta(StrmMeta.newBuilder()
                         .setTimestamp(System.currentTimeMillis())
-                        .setSchemaId("schema_avro")
+                        .setSchemaId("clickstream")
                         .setNonce(0)
                         .setTimestamp(System.currentTimeMillis())
                         .setConsentLevels(asList(0, 1, 2))
