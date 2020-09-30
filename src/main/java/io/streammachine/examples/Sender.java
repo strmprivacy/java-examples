@@ -50,6 +50,15 @@ public class Sender {
             final CompletableFuture<HttpResponse<String>> completableFuture = client.send(event, SerializationType.AVRO_BINARY);
             HttpResponse<String> response = completableFuture.join();
             log.debug("{}", response);
+
+            if (response.statusCode() == 400) {
+                // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
+                // You can see that the Stream Machine gateway rejects the
+                // message, stating that the field does not match the regex
+                // provided in resources/schema/avro/strm.json
+                log.debug("Bad request: {}", response.body());
+            }
+
             Thread.sleep(200);
         }
     }
