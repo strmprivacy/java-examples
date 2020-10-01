@@ -1,7 +1,7 @@
 {
   "name": "ClickstreamEvent",
   "type": "record",
-  "namespace": "io.streammachine.schemas.public.clickstream",
+  "namespace": "io.streammachine.schemas.strmcatalog.clickstream",
   "strmSchemaId": "clickstream",
   "fields": [
     {
