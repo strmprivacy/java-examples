@@ -87,7 +87,6 @@ public class Sender {
                         .setTimestamp(System.currentTimeMillis())
                         .setSchemaId("clickstream")
                         .setNonce(0)
-                        .setTimestamp(System.currentTimeMillis())
                         .setConsentLevels(asList(0, 1, 2))
                         .build())
                 .setUrl("https://portal.streammachine.io")
