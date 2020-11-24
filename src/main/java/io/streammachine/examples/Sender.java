@@ -7,17 +7,14 @@ import io.streammachine.schemas.strmcatalog.clickstream.ClickstreamEvent;
 import io.streammachine.schemas.strmcatalog.clickstream.Customer;
 import io.streammachine.schemas.strmcatalog.clickstream.StrmMeta;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URISyntaxException;
-import java.net.http.HttpResponse;
-import java.util.concurrent.CompletableFuture;
+import org.asynchttpclient.Response;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 @Slf4j
 public class Sender {
-    public static void main(String[] args) throws InterruptedException, URISyntaxException {
+    public static void main(String[] args) throws InterruptedException {
         new Sender().run(args);
     }
 
@@ -27,7 +24,7 @@ public class Sender {
      * @param args 3 parameters: [billingId, clientId, clientSecret]
      * @throws InterruptedException
      */
-    private void run(String[] args) throws InterruptedException, URISyntaxException {
+    private void run(String[] args) throws InterruptedException {
         if (args.length != 3) {
             System.out.println("Ensure that you've provided all required input arguments: [billingId, clientId, clientSecret]");
             System.exit(1);
@@ -47,16 +44,15 @@ public class Sender {
 
         while (true) {
             var event = createAvroEvent();
-            final CompletableFuture<HttpResponse<String>> completableFuture = client.send(event, SerializationType.AVRO_BINARY);
-            HttpResponse<String> response = completableFuture.join();
-            log.debug("{}", response);
+            Response response = client.send(event, SerializationType.AVRO_BINARY).join();
+            log.debug("{}: {}", response.getStatusCode(), response.getStatusText());
 
-            if (response.statusCode() == 400) {
+            if (response.getStatusCode() == 400) {
                 // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
                 // You can see that the Stream Machine gateway rejects the
                 // message, stating that the field does not match the regex
                 // provided in resources/schema/avro/strm.json
-                log.debug("Bad request: {}", response.body());
+                log.debug("Bad request: {}", response.getResponseBody());
             }
 
             Thread.sleep(200);
