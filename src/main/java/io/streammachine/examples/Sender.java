@@ -7,13 +7,15 @@ import io.streammachine.schemas.strmcatalog.clickstream.ClickstreamEvent;
 import io.streammachine.schemas.strmcatalog.clickstream.Customer;
 import io.streammachine.schemas.strmcatalog.clickstream.StrmMeta;
 import lombok.extern.slf4j.Slf4j;
-import org.asynchttpclient.Response;
 
-import static java.util.Arrays.asList;
+import java.util.Random;
+
 import static java.util.Collections.singletonList;
 
 @Slf4j
 public class Sender {
+    private static Random RANDOM = new Random();
+
     public static void main(String[] args) throws InterruptedException {
         new Sender().run(args);
     }
@@ -44,18 +46,25 @@ public class Sender {
 
         while (true) {
             var event = createAvroEvent();
-            Response response = client.send(event, SerializationType.AVRO_BINARY).join();
-            log.debug("{}: {}", response.getStatusCode(), response.getStatusText());
 
-            if (response.getStatusCode() == 400) {
-                // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
-                // You can see that the Stream Machine gateway rejects the
-                // message, stating that the field does not match the regex
-                // provided in resources/schema/avro/strm.json
-                log.debug("Bad request: {}", response.getResponseBody());
-            }
+            client.send(event, SerializationType.AVRO_BINARY)
+                    .whenComplete((response, exception) -> {
+                        if (exception != null) {
+                            log.error("An exception occurred while trying to send an event to Stream Machine", exception);
+                        }
 
-            Thread.sleep(200);
+                        if (response.getStatus() == 204) {
+                            log.debug("{}", response.getStatus());
+                        } else if (response.getStatus() == 400) {
+                            // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
+                            // You can see that the Stream Machine gateway rejects the
+                            // message, stating that the field does not match the regex
+                            // provided in resources/schema/avro/strm.json
+                            log.debug("Bad request: {}", response.getContentAsString());
+                        }
+                    });
+
+            Thread.sleep(500);
         }
     }
 
@@ -69,6 +78,8 @@ public class Sender {
      * @return a {@link io.streammachine.driver.domain.StreamMachineEvent}
      */
     private static ClickstreamEvent createAvroEvent() {
+        int consentLevel = RANDOM.nextBoolean() ? 1 : 0;
+
         return ClickstreamEvent.newBuilder()
                 .setAbTests(singletonList("abc"))
                 .setEventType("button x clicked")
@@ -83,7 +94,7 @@ public class Sender {
                         .setTimestamp(System.currentTimeMillis())
                         .setSchemaId("clickstream")
                         .setNonce(0)
-                        .setConsentLevels(asList(0, 1, 2))
+                        .setConsentLevels(singletonList(consentLevel))
                         .build())
                 .setUrl("https://portal.streammachine.io")
                 .build();

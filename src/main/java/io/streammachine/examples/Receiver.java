@@ -1,11 +1,11 @@
 package io.streammachine.examples;
 
 import io.streammachine.driver.client.StreamMachineClient;
+import io.streammachine.driver.common.WebSocketConsumer;
 import io.streammachine.driver.domain.Config;
 import lombok.extern.slf4j.Slf4j;
-import org.asynchttpclient.Response;
-import org.asynchttpclient.ws.WebSocket;
-import org.asynchttpclient.ws.WebSocketListener;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.websocket.api.Session;
 
 @Slf4j
 public class Receiver {
@@ -24,7 +24,6 @@ public class Receiver {
         var clientSecret = args[2];
 
         var config = Config.builder().build();
-
         StreamMachineClient client = StreamMachineClient.builder()
                 .billingId(billingId)
                 .clientId(clientId)
@@ -32,35 +31,36 @@ public class Receiver {
                 .config(config)
                 .build();
 
-        Response isAlive = client.egressIsAlive();
-        log.debug("{}: {}", isAlive.getStatusCode(), isAlive.getStatusText());
+        ContentResponse isAlive = client.egressIsAlive();
+
+        log.debug("{}: {}", isAlive.getStatus(), isAlive.getReason());
 
         client.startReceivingWs(true, new StreamMachineEventWsListener());
     }
 
-    private static class StreamMachineEventWsListener implements WebSocketListener {
+    private static class StreamMachineEventWsListener extends WebSocketConsumer {
+        @Override
+        public void onWebSocketClose(int statusCode, String reason) {
+            log.info("Closed websocked connection...");
+            log.info("Code: {}", statusCode);
+            log.info("Reason: {}", reason);
+        }
 
         @Override
-        public void onOpen(WebSocket websocket) {
+        public void onWebSocketConnect(Session sess) {
             log.info("Opened websocket connection...");
         }
 
         @Override
-        public void onClose(WebSocket websocket, int code, String reason) {
-            log.info("Closed websocked connection...");
+        public void onWebSocketError(Throwable cause) {
+            log.error("An error occurred", cause);
         }
 
         @Override
-        public void onTextFrame(String payload, boolean finalFragment, int rsv) {
-            System.out.println(payload);
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            log.error("An error occurred", t);
+        public void onWebSocketText(String message) {
+            System.out.println(message);
         }
     }
-
 }
 
 
