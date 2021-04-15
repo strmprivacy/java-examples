@@ -20,14 +20,14 @@
         <dependency>
             <groupId>io.streammachine</groupId>
             <artifactId>java-driver</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1</version>
         </dependency>
 
         <!-- Schema -->
         <dependency>
-            <groupId>io.streammachine.schemas.strmcatalog</groupId>
+            <groupId>io.streammachine.public_schemas</groupId>
             <artifactId>clickstream</artifactId>
-            <version>0.0.1</version>
+            <version>0.2.0</version>
         </dependency>
 
 
