@@ -3,9 +3,9 @@ package io.streammachine.examples;
 import io.streammachine.driver.client.StreamMachineClient;
 import io.streammachine.driver.domain.Config;
 import io.streammachine.driver.serializer.SerializationType;
-import io.streammachine.schemas.strmcatalog.clickstream.ClickstreamEvent;
-import io.streammachine.schemas.strmcatalog.clickstream.Customer;
-import io.streammachine.schemas.strmcatalog.clickstream.StrmMeta;
+import io.streammachine.public_schemas.clickstream.ClickstreamEvent;
+import io.streammachine.public_schemas.clickstream.Customer;
+import io.streammachine.public_schemas.clickstream.StrmMeta;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
@@ -75,7 +75,7 @@ public class Sender {
      * <p>
      * This particular event corresponds to an Avro schema that you can see in resources/schema/avro/schema.avsc and resources/schema/avro/strm.json
      *
-     * @return a {@link io.streammachine.driver.domain.StreamMachineEvent}
+     * @return a {@link io.streammachine.schemas.StreamMachineEvent}
      */
     private static ClickstreamEvent createAvroEvent() {
         int consentLevel = RANDOM.nextBoolean() ? 1 : 0;
