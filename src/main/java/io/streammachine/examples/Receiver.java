@@ -2,58 +2,51 @@ package io.streammachine.examples;
 
 import io.streammachine.driver.client.StreamMachineClient;
 import io.streammachine.driver.common.WebSocketConsumer;
-import io.streammachine.driver.domain.Config;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.websocket.api.Session;
+import org.slf4j.Logger;
 
-@Slf4j
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class Receiver {
+
+    private static final Logger LOG = getLogger(Receiver.class);
+
     public static void main(String[] args) {
         new Receiver().run(args);
     }
 
     private void run(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Ensure that you've provided all required input arguments: [billingId, clientId, clientSecret]");
-            System.exit(1);
+        StreamMachineClient client = ClientBuilder.createStreamMachineClient(args);
+
+        try {
+            ContentResponse isAlive = client.egressIsAlive();
+
+            LOG.debug("{}: {}", isAlive.getStatus(), isAlive.getReason());
+
+            client.startReceivingWs(true, new StreamMachineEventWsListener());
+        } catch (Exception e) {
+            LOG.error("Exception checking isAlive: " + e.getMessage(), e);
+            client.stop();
         }
-
-        var billingId = args[0];
-        var clientId = args[1];
-        var clientSecret = args[2];
-
-        var config = Config.builder().build();
-        StreamMachineClient client = StreamMachineClient.builder()
-                .billingId(billingId)
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .config(config)
-                .build();
-
-        ContentResponse isAlive = client.egressIsAlive();
-
-        log.debug("{}: {}", isAlive.getStatus(), isAlive.getReason());
-
-        client.startReceivingWs(true, new StreamMachineEventWsListener());
     }
 
     private static class StreamMachineEventWsListener extends WebSocketConsumer {
         @Override
         public void onWebSocketClose(int statusCode, String reason) {
-            log.info("Closed websocked connection...");
-            log.info("Code: {}", statusCode);
-            log.info("Reason: {}", reason);
+            LOG.info("Closed websocked connection...");
+            LOG.info("Code: {}", statusCode);
+            LOG.info("Reason: {}", reason);
         }
 
         @Override
         public void onWebSocketConnect(Session sess) {
-            log.info("Opened websocket connection...");
+            LOG.info("Opened websocket connection...");
         }
 
         @Override
         public void onWebSocketError(Throwable cause) {
-            log.error("An error occurred", cause);
+            LOG.error("An error occurred", cause);
         }
 
         @Override
