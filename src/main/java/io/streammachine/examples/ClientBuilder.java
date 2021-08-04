@@ -15,9 +15,9 @@ public class ClientBuilder {
         var clientSecret = args[2];
 
         var config = Config.builder()
-                           .gatewayHost("in.dev.strm.services")
-                           .egressHost("out.dev.strm.services")
-                           .stsHost("auth.dev.strm.services")
+                           .gatewayHost("in.strm.services")
+                           .egressHost("out.strm.services")
+                           .stsHost("auth.strm.services")
                            .build();
         return StreamMachineClient.builder()
                                   .billingId(billingId)

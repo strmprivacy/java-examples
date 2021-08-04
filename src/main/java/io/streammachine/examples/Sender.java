@@ -2,12 +2,12 @@ package io.streammachine.examples;
 
 import io.streammachine.driver.client.StreamMachineClient;
 import io.streammachine.driver.serializer.SerializationType;
-import io.streammachine.schemas.strmcatalog.clickstream.ClickstreamEvent;
-import io.streammachine.schemas.strmcatalog.clickstream.Customer;
-import io.streammachine.schemas.strmcatalog.clickstream.StrmMeta;
+import io.streammachine.schemas.demo.v1.DemoEvent;
+import io.streammachine.schemas.demo.v1.StrmMeta;
 import org.slf4j.Logger;
 
 import java.util.Random;
+import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -32,26 +32,19 @@ public class Sender {
      *
      * @return a {@link io.streammachine.schemas.StreamMachineEvent}
      */
-    private static ClickstreamEvent createAvroEvent() {
-        int consentLevel = RANDOM.nextBoolean() ? 1 : 0;
+    private static DemoEvent createAvroEvent() {
+        int consentLevel = RANDOM.nextInt(4);
 
-        return ClickstreamEvent.newBuilder()
-                               .setAbTests(singletonList("abc"))
-                               .setEventType("button x clicked")
-                               .setCustomer(Customer.newBuilder()
-                                                    .setId("some-identifier")
-                                                    .build())
-                               .setReferrer("https://www.streammachine.io")
-                               .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) " +
-                                       "Chrome/85.0.4183.83 Safari/537.36")
-                               .setProducerSessionId("session-01")
-                               .setConversion(1)
-                               .setStrmMeta(StrmMeta.newBuilder()
-                                                    .setEventContractRef("streammachine/clickstream/0.3.0")
-                                                    .setConsentLevels(singletonList(consentLevel))
-                                                    .build())
-                               .setUrl("https://portal.streammachine.io")
-                               .build();
+        return DemoEvent.newBuilder()
+                .setStrmMeta(StrmMeta.newBuilder()
+                        .setEventContractRef("streammachine/example/1.2.3")
+                        .setConsentLevels(singletonList(consentLevel))
+                        .build())
+                .setUniqueIdentifier(UUID.randomUUID().toString())
+                .setSomeSensitiveValue("A value that should be encrypted")
+                .setConsistentValue("a-user-session")
+                .setNotSensitiveValue("Anyone is free to see this text.")
+                .build();
     }
 
     /**
