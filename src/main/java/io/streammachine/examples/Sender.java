@@ -23,12 +23,10 @@ public class Sender {
     }
 
     /**
-     * Generate a ClickstreamEvent from a Java class that corresponds with a the clickstream schema.
-     * These Java classes are generated and provided by Streammachine, based on the
-     * schema definition and the serialization schema.
+     * Generate a DemoEvent from a Java class that corresponds with a the streammachine/demo/1.0.0 schema.
+     * These Java classes are generated and provided by Stream Machine, based on the
+     * serialization schema.
      * <p>
-     * This particular event corresponds to an Avro schema that you can see in resources/schema/avro/schema.avsc and
-     * resources/schema/avro/strm.json
      *
      * @return a {@link io.streammachine.schemas.StreamMachineEvent}
      */
