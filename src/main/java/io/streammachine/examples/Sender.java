@@ -41,7 +41,7 @@ public class Sender {
                 .setUniqueIdentifier(UUID.randomUUID().toString())
                 .setSomeSensitiveValue("A value that should be encrypted")
                 .setConsistentValue("a-user-session")
-                .setNotSensitiveValue("Anyone is free to see this text.")
+                .setNotSensitiveValue("Hello from Java")
                 .build();
     }
 
