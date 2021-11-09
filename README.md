@@ -3,9 +3,9 @@
 ## Need help?
 
 See our
-[documentation](https://docs.streammachine.io/quickstart/full-example.html) for
+[documentation](https://docs.strmprivacy.io/quickstart/full-example.html) for
 documentation on how to configure streams. Or [reach out to
-us](https://docs.streammachine.io/docs/latest/contact/index.html).
+us](https://docs.strmprivacy.io/docs/latest/contact/index.html).
 
 ### Using gradle and Jdk 9?
 

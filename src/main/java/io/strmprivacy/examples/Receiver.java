@@ -1,7 +1,7 @@
-package io.streammachine.examples;
+package io.strmprivacy.examples;
 
-import io.streammachine.driver.client.StreamMachineClient;
-import io.streammachine.driver.common.WebSocketConsumer;
+import io.strmprivacy.driver.client.StrmPrivacyClient;
+import io.strmprivacy.driver.common.WebSocketConsumer;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
@@ -17,21 +17,21 @@ public class Receiver {
     }
 
     private void run(String[] args) {
-        StreamMachineClient client = ClientBuilder.createStreamMachineClient(args);
+        StrmPrivacyClient client = ClientBuilder.createStrmPrivacyClient(args);
 
         try {
             ContentResponse isAlive = client.egressIsAlive();
 
             LOG.debug("{}: {}", isAlive.getStatus(), isAlive.getReason());
 
-            client.startReceivingWs(true, new StreamMachineEventWsListener());
+            client.startReceivingWs(true, new StrmPrivacyEventWsListener());
         } catch (Exception e) {
             LOG.error("Exception checking isAlive: " + e.getMessage(), e);
             client.stop();
         }
     }
 
-    private static class StreamMachineEventWsListener extends WebSocketConsumer {
+    private static class StrmPrivacyEventWsListener extends WebSocketConsumer {
         @Override
         public void onWebSocketClose(int statusCode, String reason) {
             LOG.info("Closed websocked connection...");

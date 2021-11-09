@@ -1,7 +1,7 @@
-package io.streammachine.examples;
+package io.strmprivacy.examples;
 
-import io.streammachine.driver.client.StreamMachineClient;
-import io.streammachine.driver.serializer.SerializationType;
+import io.strmprivacy.driver.client.StrmPrivacyClient;
+import io.strmprivacy.driver.serializer.SerializationType;
 import io.streammachine.schemas.demo.v1.DemoEvent;
 import io.streammachine.schemas.demo.v1.StrmMeta;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class Sender {
      * serialization schema.
      * <p>
      *
-     * @return a {@link io.streammachine.schemas.StreamMachineEvent}
+     * @return a {@link io.strmprivacy.schemas.StrmEvent}
      */
     private static DemoEvent createAvroEvent() {
         int consentLevel = RANDOM.nextInt(4);
@@ -52,7 +52,7 @@ public class Sender {
      * @throws InterruptedException
      */
     private void run(String[] args) throws InterruptedException {
-        StreamMachineClient client = ClientBuilder.createStreamMachineClient(args);
+        StrmPrivacyClient client = ClientBuilder.createStrmPrivacyClient(args);
 
         while (true) {
             var event = createAvroEvent();
