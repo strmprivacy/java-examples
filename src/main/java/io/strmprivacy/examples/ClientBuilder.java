@@ -1,10 +1,10 @@
-package io.streammachine.examples;
+package io.strmprivacy.examples;
 
-import io.streammachine.driver.client.StreamMachineClient;
-import io.streammachine.driver.domain.Config;
+import io.strmprivacy.driver.client.StrmPrivacyClient;
+import io.strmprivacy.driver.domain.Config;
 
 public class ClientBuilder {
-    public static StreamMachineClient createStreamMachineClient(String[] args) {
+    public static StrmPrivacyClient createStrmPrivacyClient(String[] args) {
         if (args.length != 3) {
             System.out.println("Ensure that you've provided all required input arguments: [billingId, clientId, clientSecret]");
             System.exit(1);
@@ -16,7 +16,7 @@ public class ClientBuilder {
 
         var config = Config.builder().build();
 
-        return StreamMachineClient.builder()
+        return StrmPrivacyClient.builder()
                                   .billingId(billingId)
                                   .clientId(clientId)
                                   .clientSecret(clientSecret)
