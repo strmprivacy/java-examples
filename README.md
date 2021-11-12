@@ -1,4 +1,4 @@
-# Stream Machine Java Driver Examples
+# STRM Privacy Java Driver Examples
 
 ## Need help?
 
@@ -14,8 +14,8 @@ See [this discussion](https://github.com/jetty-project/jetty-alpn/issues/15)
 Add the following section to the `dependencies` block of your Gradle based application.
 
 ```
-implementation "io.streammachine:java-driver:$streamMachineJavaDriverVersion"
-implementation "io.streammachine.schemas:demo-avro:$streamMachineSchemasClickstreamVersion"
+implementation "io.strmprivacy:java-driver:$strmPrivacyJavaDriverVersion"
+implementation "io.strmprivacy.schemas:demo-avro:$strmPrivacySchemasClickstreamVersion"
 // this dependency is normally added in the Maven build process
 // but since Gradle doesn't pick this up, it must be added manually
 implementation "org.eclipse.jetty:jetty-alpn-java-client:9.4.38.v20210224"

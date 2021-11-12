@@ -17,11 +17,11 @@ public class ClientBuilder {
         var config = Config.builder().build();
 
         return StrmPrivacyClient.builder()
-                                  .billingId(billingId)
-                                  .clientId(clientId)
-                                  .clientSecret(clientSecret)
-                                  .config(config)
-                                  .build();
+                .billingId(billingId)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .config(config)
+                .build();
     }
 
 }
