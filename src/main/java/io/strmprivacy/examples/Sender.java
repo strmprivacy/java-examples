@@ -1,7 +1,7 @@
 package io.strmprivacy.examples;
 
 import io.strmprivacy.driver.client.StrmPrivacyClient;
-import io.strmprivacy.driver.serializer.SerializationType;
+import io.strmprivacy.driver.domain.Config;
 import io.strmprivacy.schemas.demo.v1.DemoEvent;
 import io.strmprivacy.schemas.demo.v1.StrmMeta;
 import org.slf4j.Logger;
@@ -45,6 +45,24 @@ public class Sender {
                 .build();
     }
 
+    public static StrmPrivacyClient createStrmPrivacyClient(String[] args) {
+        if (args.length != 3) {
+            System.out.println("Ensure that you've provided all required input arguments: [billingId, clientId, clientSecret]");
+            System.exit(1);
+        }
+
+        // config can be modified to use different clusters than the default
+        // STRM public endpoint
+        var config = Config.builder().build();
+
+        return StrmPrivacyClient.builder()
+                .billingId(args[0])
+                .clientId(args[1])
+                .clientSecret(args[2])
+                .config(config)
+                .build();
+    }
+
     /**
      * start sending hardcoded avro events.
      *
@@ -52,25 +70,25 @@ public class Sender {
      * @throws InterruptedException
      */
     private void run(String[] args) throws InterruptedException {
-        StrmPrivacyClient client = ClientBuilder.createStrmPrivacyClient(args);
+        StrmPrivacyClient client = createStrmPrivacyClient(args);
 
         while (true) {
             var event = createAvroEvent();
 
-            client.send(event, SerializationType.AVRO_BINARY)
+            client.send(event)
                   .whenComplete((response, exception) -> {
                       if (exception != null) {
                           LOG.error("An exception occurred while trying to send an event to STRM Privacy", exception);
                       }
 
                       if (response.getStatus() == 204) {
-                          LOG.debug("{}", response.getStatus());
+                          LOG.info("{}", response.getStatus());
                       } else if (response.getStatus() == 400) {
                           // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
                           // You can see that the STRM Privacy gateway rejects the
                           // message, stating that the field does not match the regex
                           // provided in resources/schema/avro/strm.json
-                          LOG.debug("Bad request: {}", response.getContentAsString());
+                          LOG.info("Bad request: {}", response.getContentAsString());
                       }
                   });
 
