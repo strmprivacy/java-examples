@@ -37,10 +37,7 @@ public class Sender {
         var clientId = args[1];
         var clientSecret = args[2];
 
-        var config = Config.builder()
-                .stsHost("sts.dev.strmprivacy.io")
-                .gatewayHost("events.dev.strmprivacy.io")
-                .build();
+        var config = Config.builder().build();
 
         StrmPrivacyClient client = StrmPrivacyClient.builder()
                 .billingId(billingId)
