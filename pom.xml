@@ -19,7 +19,7 @@
         <dependency>
             <groupId>io.strmprivacy</groupId>
             <artifactId>java-driver</artifactId>
-            <version>2.0.1</version>
+            <version>3.0.0</version>
         </dependency>
 
         <!-- Schema -->
@@ -30,9 +30,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
