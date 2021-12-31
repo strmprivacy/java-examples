@@ -58,10 +58,6 @@ public class Sender {
                         if (response.getStatus() == 204) {
                             LOG.debug("{}", response.getStatus());
                         } else if (response.getStatus() == 400) {
-                            // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
-                            // You can see that the STRM Privacy gateway rejects the
-                            // message, stating that the field does not match the regex
-                            // provided in resources/schema/avro/strm.json
                             LOG.debug("Bad request: {}", response.getContentAsString());
                         }
                     });
