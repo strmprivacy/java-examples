@@ -1,7 +1,7 @@
 package io.strmprivacy.examples;
 
 import io.strmprivacy.driver.client.StrmPrivacyClient;
-import io.strmprivacy.driver.serializer.SerializationType;
+import io.strmprivacy.driver.domain.Config;
 import io.strmprivacy.schemas.demo.v1.DemoEvent;
 import io.strmprivacy.schemas.demo.v1.StrmMeta;
 import org.slf4j.Logger;
@@ -16,10 +16,54 @@ public class Sender {
 
     private static final Logger LOG = getLogger(Sender.class);
 
-    private static Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
     public static void main(String[] args) throws InterruptedException {
         new Sender().run(args);
+    }
+
+    /**
+     * start sending hardcoded avro events.
+     *
+     * @param args 3 parameters: [billingId, clientId, clientSecret]
+     */
+    private void run(String[] args) throws InterruptedException {
+        if (args.length != 3) {
+            System.out.println("Ensure that you've provided all required input arguments: [billingId, clientId, clientSecret]");
+            System.exit(1);
+        }
+
+        var billingId = args[0];
+        var clientId = args[1];
+        var clientSecret = args[2];
+
+        var config = Config.builder().build();
+
+        StrmPrivacyClient client = StrmPrivacyClient.builder()
+                .billingId(billingId)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .config(config)
+                .build();
+
+        while (true) {
+            var event = createAvroEvent();
+
+            client.send(event)
+                    .whenComplete((response, exception) -> {
+                        if (exception != null) {
+                            LOG.error("An exception occurred while trying to send an event to STRM Privacy", exception);
+                        }
+
+                        if (response.getStatus() == 204) {
+                            LOG.debug("{}", response.getStatus());
+                        } else if (response.getStatus() == 400) {
+                            LOG.debug("Bad request: {}", response.getContentAsString());
+                        }
+                    });
+
+            Thread.sleep(500);
+        }
     }
 
     /**
@@ -43,38 +87,5 @@ public class Sender {
                 .setConsistentValue("a-user-session")
                 .setNotSensitiveValue("Hello from Java")
                 .build();
-    }
-
-    /**
-     * start sending hardcoded avro events.
-     *
-     * @param args 3 parameters: [billingId, clientId, clientSecret]
-     * @throws InterruptedException
-     */
-    private void run(String[] args) throws InterruptedException {
-        StrmPrivacyClient client = ClientBuilder.createStrmPrivacyClient(args);
-
-        while (true) {
-            var event = createAvroEvent();
-
-            client.send(event, SerializationType.AVRO_BINARY)
-                  .whenComplete((response, exception) -> {
-                      if (exception != null) {
-                          LOG.error("An exception occurred while trying to send an event to STRM Privacy", exception);
-                      }
-
-                      if (response.getStatus() == 204) {
-                          LOG.debug("{}", response.getStatus());
-                      } else if (response.getStatus() == 400) {
-                          // Try to change the value for the url field in the createAvroEvent method below to something that is not a url
-                          // You can see that the STRM Privacy gateway rejects the
-                          // message, stating that the field does not match the regex
-                          // provided in resources/schema/avro/strm.json
-                          LOG.debug("Bad request: {}", response.getContentAsString());
-                      }
-                  });
-
-            Thread.sleep(500);
-        }
     }
 }
