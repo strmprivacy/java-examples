@@ -79,7 +79,7 @@ public class Sender {
 
         return DemoEvent.newBuilder()
                 .setStrmMeta(StrmMeta.newBuilder()
-                        .setEventContractRef("strmprivacy/example/1.2.3")
+                        .setEventContractRef("strmprivacy/example/1.3.0")
                         .setConsentLevels(singletonList(consentLevel))
                         .build())
                 .setUniqueIdentifier(UUID.randomUUID().toString())
