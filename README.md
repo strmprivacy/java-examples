@@ -3,7 +3,7 @@
 ## Need help?
 
 See our
-[documentation](https://docs.strmprivacy.io/quickstart/full-example.html) for
+[documentation](https://docs.strmprivacy.io/docs/latest/quickstart/full-example/) for
 documentation on how to configure streams. Or [reach out to
 us](https://docs.strmprivacy.io/docs/latest/contact/index.html).
 
