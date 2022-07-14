@@ -25,22 +25,20 @@ public class Sender {
     /**
      * start sending hardcoded avro events.
      *
-     * @param args 3 parameters: [billingId, clientId, clientSecret]
+     * @param args 3 parameters: [clientId, clientSecret]
      */
     private void run(String[] args) throws InterruptedException {
-        if (args.length != 3) {
-            System.out.println("Ensure that you've provided all required input arguments: [billingId, clientId, clientSecret]");
+        if (args.length != 2) {
+            System.out.println("Ensure that you've provided all required input arguments: [clientId, clientSecret]");
             System.exit(1);
         }
 
-        var billingId = args[0];
-        var clientId = args[1];
-        var clientSecret = args[2];
+        var clientId = args[0];
+        var clientSecret = args[1];
 
         var config = Config.builder().build();
 
         StrmPrivacyClient client = StrmPrivacyClient.builder()
-                .billingId(billingId)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .config(config)
