@@ -11,7 +11,7 @@
         <slf4j.version>1.7.32</slf4j.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     </properties>
 
     <dependencies>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>io.strmprivacy</groupId>
             <artifactId>java-driver</artifactId>
-            <version>4.0.0</version>
+            <version>5.0.1</version>
         </dependency>
 
         <!-- Schema -->

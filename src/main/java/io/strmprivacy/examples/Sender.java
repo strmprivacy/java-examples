@@ -54,7 +54,7 @@ public class Sender {
                         }
 
                         if (response.getStatus() == 204) {
-                            LOG.debug("{}", response.getStatus());
+                            LOG.debug("Successfully sent event");
                         } else if (response.getStatus() == 400) {
                             LOG.debug("Bad request: {}", response.getContentAsString());
                         }
